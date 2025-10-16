@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OFMS Architecture Diagrams</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                fontSize: '16px',
+                fontFamily: 'arial'
+            }
+        });
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #22c55e;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 40px;
+        }
+        .diagram-section {
+            background: #2a2a2a;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .diagram-section h2 {
+            color: #22c55e;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #22c55e;
+            padding-bottom: 10px;
+        }
+        .mermaid {
+            background: white;
+            border-radius: 4px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+        button:hover {
+            background: #16a34a;
+        }
+        .info {
+            background: #1e3a5f;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌱 OFMS Architecture Diagrams</h1>
+        <p class="subtitle">Enterprise-grade Organic Farm Management System</p>
+
+        <div class="controls">
+            <button onclick="window.print()">🖨️ Print Diagrams</button>
+            <button onclick="downloadSVG('compliance')">⬇️ Download Compliance Diagram</button>
+            <button onclick="downloadSVG('complete')">⬇️ Download Complete System</button>
+        </div>
+
+        <div class="info">
+            <strong>💡 Tip:</strong> Use Ctrl/Cmd + scroll to zoom. Click and drag to pan. Right-click on diagrams to save as image.
+        </div>
+
+        <!-- Compliance Architecture Diagram -->
+        <div class="diagram-section">
+            <h2>1. OFMS Compliance Technical Architecture</h2>
+            <p>Visual overview of the technical architecture for USDA Organic & FDA FSMA compliance modules.</p>
+            <div class="mermaid" id="compliance-diagram">
+flowchart TD
+    %% UI Layer
+    subgraph UI["🌐 User Interface (Web & Mobile)"]
+      A1["👩‍🌾 Farm Manager Dashboard"]
+      A2["🛡️ Compliance Admin Panel"]
+      A3["👀 Auditor/Inspector Portal"]
+      A4["👷 Worker Mobile App"]
+    end
+
+    %% API Layer
+    subgraph API["🟦 Next.js API Layer"]
+      B1["/api/compliance/usda-organic"]
+      B2["/api/compliance/fda-fsma"]
+      B3["/api/traceability"]
+      B4["/api/audit-log"]
+      B5["/api/users & auth"]
+      B6["/api/files (evidence uploads)"]
+    end
+
+    %% Business Logic
+    subgraph Logic["🟩 Business Logic & Services"]
+      C1["Compliance Service"]
+      C2["Traceability Service"]
+      C3["Audit Trail Service"]
+      C4["Notification & Reminder Service"]
+      C5["Role & Permission Service"]
+      C6["File Storage Service"]
+    end
+
+    %% Data Layer
+    subgraph DB["🟫 Database & Storage"]
+      D1["PostgreSQL (Prisma)"]
+      D2["AWS S3 / Cloud Storage"]
+      D3["Redis / Caching"]
+    end
+
+    %% External Integrations
+    subgraph EXT["🔗 External Integrations"]
+      E1["USDA NOP Certifier API"]
+      E2["FDA Data Dashboard"]
+      E3["Lab Results API"]
+      E4["Email/SMS Gateway"]
+      E5["SSO/Identity Provider"]
+    end
+
+    %% Data Flows
+    A1-->|REST/GraphQL|B1
+    A2-->|REST/GraphQL|B2
+    A3-->|REST/GraphQL|B4
+    A4-->|REST/GraphQL|B1
+    B1-->|Service Calls|C1
+    B2-->|Service Calls|C1
+    B3-->|Service Calls|C2
+    B4-->|Service Calls|C3
+    B5-->|Service Calls|C5
+    B6-->|Service Calls|C6
+    C1-->|ORM|D1
+    C2-->|ORM|D1
+    C3-->|ORM|D1
+    C4-->|Events|D3
+    C6-->|File Upload|D2
+    C4-->|Notify|E4
+    C5-->|SSO|E5
+    C1-->|Cert Validation|E1
+    C1-->|FDA Report|E2
+    C1-->|Lab Data|E3
+
+    %% Legend
+    classDef ui fill:#e3f2fd,stroke:#2196f3,stroke-width:2px;
+    classDef api fill:#e1bee7,stroke:#7b1fa2,stroke-width:2px;
+    classDef logic fill:#e8f5e9,stroke:#388e3c,stroke-width:2px;
+    classDef db fill:#fff3e0,stroke:#f57c00,stroke-width:2px;
+    classDef ext fill:#fce4ec,stroke:#c2185b,stroke-width:2px;
+    class UI,A1,A2,A3,A4 ui;
+    class API,B1,B2,B3,B4,B5,B6 api;
+    class Logic,C1,C2,C3,C4,C5,C6 logic;
+    class DB,D1,D2,D3 db;
+    class EXT,E1,E2,E3,E4,E5 ext;
+            </div>
+        </div>
+
+        <!-- Complete System Architecture (Simplified for HTML) -->
+        <div class="diagram-section">
+            <h2>2. OFMS Complete System Architecture</h2>
+            <p>Comprehensive view of the entire Organic Farm Management System platform.</p>
+            <div class="info">
+                <strong>📌 Note:</strong> The complete system diagram is very large. For best viewing:
+                <ul>
+                    <li>Open the SVG files directly: <code>OFMS_COMPLETE_SYSTEM_ARCHITECTURE-1.svg</code></li>
+                    <li>Or view the full diagram in the Markdown file with a Mermaid-enabled viewer</li>
+                </ul>
+            </div>
+            <p style="text-align: center; padding: 40px;">
+                <a href="OFMS_COMPLETE_SYSTEM_ARCHITECTURE-1.svg" target="_blank" style="color: #22c55e; font-size: 18px; text-decoration: none; border: 2px solid #22c55e; padding: 15px 30px; border-radius: 8px; display: inline-block;">
+                    📊 Open Complete System Diagram (SVG)
+                </a>
+            </p>
+        </div>
+
+        <div class="diagram-section">
+            <h2>📋 Legend</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                <div style="background: #e3f2fd; color: #1976d2; padding: 10px; border-radius: 4px; text-align: center;">
+                    <strong>🌐 UI Layer</strong><br>Blue
+                </div>
+                <div style="background: #e1bee7; color: #7b1fa2; padding: 10px; border-radius: 4px; text-align: center;">
+                    <strong>🔷 API Layer</strong><br>Purple
+                </div>
+                <div style="background: #e8f5e9; color: #388e3c; padding: 10px; border-radius: 4px; text-align: center;">
+                    <strong>🟢 Business Logic</strong><br>Green
+                </div>
+                <div style="background: #fff3e0; color: #f57c00; padding: 10px; border-radius: 4px; text-align: center;">
+                    <strong>🗄️ Data Layer</strong><br>Orange
+                </div>
+                <div style="background: #fce4ec; color: #c2185b; padding: 10px; border-radius: 4px; text-align: center;">
+                    <strong>🔗 External</strong><br>Pink
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function downloadSVG(type) {
+            const filename = type === 'compliance' 
+                ? 'OFMS_COMPLIANCE_TECH_ARCH-1.svg'
+                : 'OFMS_COMPLETE_SYSTEM_ARCHITECTURE-1.svg';
+            window.open(filename, '_blank');
+        }
+    </script>
+</body>
+</html>
